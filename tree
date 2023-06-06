@@ -1,0 +1,19 @@
+def tree(root):
+    re = []
+    treeNode_list = []
+    if not root:
+        return re
+    treeNode_list.append(root)
+    while treeNode_list:
+        currentResult = []
+        nextNode_list = []
+        for node in treeNode_list:
+            currentResult.append(node.val)
+            if node.left:
+                nextNode_list.append(node.left)
+            if node.right:
+                nextNode_list.append(node.right)
+        re.append(currentResult)
+        treeNode_list = nextNode_list
+    return re
+2023/5/26
