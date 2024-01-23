@@ -1,0 +1,87 @@
+from SeqStack import*
+
+def reverse_Stack(value,system):
+    Stack = SeqStack(15)
+    while value:
+        Stack.push_Stack(value % system)
+        value //= system
+    while Stack.innull_Stack() != True:
+        x = Stack.pop_Stack()
+        if x == 10:
+            print("(A)", end="")
+        elif x == 11:
+            print("(B)", end="")
+        elif x == 12:
+            print("(C)", end="")
+        elif x == 13:
+            print("(D)", end="")
+        elif x == 14:
+            print("(E)", end="")
+        elif x == 15:
+            print("(F)", end="")
+        else:
+            print(x, end="")
+    print()
+
+def match(str):
+    Stack = SeqStack(15)
+    for i in range(len(str)):
+        if str[i] == '(' or '[' or '{':
+            Stack.push_Stack(str[i])
+        elif str[i] == ')':
+            if Stack.innull_Stack() != True and Stack.pop_Stack() == '(':
+                Stack.pop_Stack()
+            else:
+                return False
+        elif str[i] == ']':
+            if Stack.innull_Stack() != True and Stack.pop_Stack() == '[':
+                Stack.pop_Stack()
+            else:
+                return False
+        elif str[i] == '}':
+            if Stack.innull_Stack() != True and Stack.pop_Stack() == '{':
+                Stack.pop_Stack()
+            else:
+                return False
+    if Stack.innull_Stack() == True:
+        return True
+    else:
+        return False
+def legal(item):
+    Stack = SeqStack(5)
+    j = 0
+    for i in range(1,len(item)+1):
+        Stack.push_Stack(i)
+        while Stack.innull_Stack() != True and Stack.gettop_Stack() == item[j]:
+            Stack.pop_Stack()
+            j += 1
+    if j == 5 and Stack.innull_Stack() == True:
+        print("合法")
+    else:
+        print("不合法")
+def menu():
+    print("1.进制转化")
+    print("2.括号匹配")
+    print("3.判断出栈合法")
+    print("4.")
+    print("5.")
+
+if __name__ == '__main__':
+    menu()
+    while True:
+        N = int(input("序号:"))
+        if N == 1:
+            value = int((input("数值:")))
+            system = int(input("进制:"))
+            reverse_Stack(value,system)
+        elif N == 2:
+            str = input("字符:")
+            if match(str):
+                print("匹配成功")
+            else:
+                print("匹配失败")
+        elif N == 3:
+            item = [3,4,2,1,5]
+            legal(item)
+        else:
+            exit(0)
