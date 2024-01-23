@@ -1,0 +1,141 @@
+from Stack.SeqStack.SeqStack import *
+from List.SeqQueue.SeqQueue import *
+
+class BinTreeNode:
+    def __init__(self, data):
+        self.value = data
+        self.left = None
+        self.right = None
+
+
+class BinTree:
+    def __init__(self):
+        self.root = None
+
+    def create_BTree(self):
+        value = int(input("数值:"))
+        root = None
+        if value != 0:
+            root = BinTreeNode(value)
+            root.left = self.create_BTree()
+            root.right = self.create_BTree()
+        return root
+
+    def add(self, val):
+        node = BinTreeNode(val)
+        if self.root is None:
+            self.root = node
+        else:
+            q1 = SeqCircleQueue(20)
+            q1.push(self.root)
+            while q1.empty() is not True:
+                cur = q1.pop()
+                if cur.left is None:
+                    cur.left = node
+                    return
+                elif cur.right is None:
+                    cur.right = node
+                    return
+                else:
+                    q1.push(cur.left)
+                    q1.push(cur.right)
+
+    def create_non(self):
+        val = int(input("数值:"))
+        while val != 0:
+            self.add(val)
+            val = int(input("数值:"))
+
+    def preRecursive_BTree(self, node):
+        if node is not None:
+            print(node.value, end=' ')
+            self.preRecursive_BTree(node.left)
+            self.preRecursive_BTree(node.right)
+
+    def inRecursive_BTree(self, node):
+        if node is not None:
+            self.inRecursive_BTree(node.left)
+            print(node.value, end=' ')
+            self.inRecursive_BTree(node.right)
+
+    def postRecursive_BTree(self, node):
+        if node is not None:
+            self.postRecursive_BTree(node.left)
+            self.postRecursive_BTree(node.right)
+            print(node.value, end=' ')
+
+    def preRecursive_non(self):
+        s1 = SeqStack(10)
+        node = self.root
+        while node is not None or s1.innull_Stack() is not True:
+            while node is not None:
+                print(node.value, end=' ')
+                s1.push_Stack(node)
+                node = node.left
+            temp = s1.pop_Stack()
+            if temp.right is not None:
+                node = temp.right
+
+    def inRecursive_non(self):
+        s1 = SeqStack(10)
+        node = self.root
+        while node is not None or s1.innull_Stack() is not True:
+            while node is not None:
+                s1.push_Stack(node)
+                node = node.left
+            temp = s1.pop_Stack()
+            print(temp.value, end=' ')
+            if temp.right is not None:
+                node = temp.right
+
+    def postRecursive_non(self):
+        s1 = SeqStack(10)
+        s2 = SeqStack(10)
+        s1.push_Stack(self.root)
+        while s1.innull_Stack() is not True:
+            node = s1.pop_Stack()
+            if node.left is not None:
+                s1.push_Stack(node.left)
+            if node.right is not None:
+                s1.push_Stack(node.right)
+            s2.push_Stack(node)
+        while s2.innull_Stack() is not True:
+            print(s2.pop_Stack().value, end=' ')
+
+    def deep(self, node):
+        if node is None:
+            return 0
+        else:
+            left_deep = self.deep(node.left)
+            right_deep = self.deep(node.right)
+            max_deep = max(left_deep, right_deep)
+            return max_deep + 1
+
+    def count_node(self, node):
+        if node is None:
+            return 0
+        else:
+            left_count = self.count_node(node.left)
+            right_count = self.count_node(node.right)
+            sum_count = left_count + right_count + 1
+            return sum_count
+
+    def buildTree_BTree(self, pre_Order, mid_Order):
+        root = BinTreeNode(pre_Order[0])
+        if len(pre_Order) == 1:
+            return root
+        else:
+            for i in range(len(mid_Order)):
+                if pre_Order[0] == mid_Order[i]:
+                    break
+            root_index = i
+            pre_order_l = pre_Order[1:root_index+1]
+            mid_order_l = mid_Order[0:root_index]
+            if len(pre_order_l) >= 1:
+                root.left = self.buildTree_BTree(pre_order_l, mid_order_l)
+            pre_Order_r = pre_Order[len(pre_order_l)+1:]
+            mid_Order_r = mid_Order[root_index+1:]
+            if len(pre_Order_r) >= 1:
+                root.right = self.buildTree_BTree(pre_Order_r, mid_Order_r)
+            return root
+
